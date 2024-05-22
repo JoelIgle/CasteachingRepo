@@ -15,9 +15,14 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link href="/videos/1">
+                    <x-nav-link href="/videos/1" :active="request()->routeIs('videos.show')">
                         {{ __('Videos 1') }}
                     </x-nav-link>
+                    @can('videos_manage_index')
+                    <x-nav-link href="/manage/videos" :active="request()->routeIs('videos.manage.index')">
+                        {{ __('Manage Videos') }}
+                    </x-nav-link>
+                    @endcan
 
                 </div>
             </div>
@@ -161,8 +166,11 @@
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link href="/videos/1">
+            <x-responsive-nav-link href="/videos/1" :active="request()->routeIs('videos.show')">
                 {{ __('Videos 1') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/manage/videos/" :active="request()->routeIs('videos.manage.index')">
+                {{ __('Manage Videos') }}
             </x-responsive-nav-link>
         </div>
 

@@ -32,6 +32,7 @@ class VideoTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Video Example');
         $response->assertSee('Video Description');
+        $response->assertSee('1 de December de 2020');
 
     }
 }

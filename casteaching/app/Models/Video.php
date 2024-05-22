@@ -23,6 +23,16 @@ class Video extends Model
 //        'next',
 //        'series_id',
 //    ];
+
+    public function getFormattedPublishedAtAttribute(): string
+    {
+        if (!$this->published_at) {
+            return '';
+        }
+        $published_at = \Carbon\Carbon::parse($this->published_at);
+        $locale_date = optional($published_at)->locale(config('app.locale'));
+        return $locale_date->day . ' de ' . $locale_date->monthName . ' de ' . $locale_date->year;
+    }
 }
 
 

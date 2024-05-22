@@ -8,6 +8,7 @@ use App\Models\Video;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,16 +18,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        create_default_user();
-//
-//        create_default_videos();
+        $user = User::create([
+            'name' => 'SuperAdmin',
+            'email' => 'superadmin@casteaching.com',
+            'password' => Hash::make('12345678'),
 
-
-        User::create([
-            'name' => Hash::make(config('casteaching.user_profe.name')),
-            'email' => Hash::make(config('casteaching.user_profe.email')),
-            'password' => Hash::make(config('casteaching.user_profe.password')),
         ]);
+        $user->superadmin = true;
+        $user->save();
+
 
         Video::create([
             'title' => 'Video de la bd',
@@ -38,5 +38,8 @@ class DatabaseSeeder extends Seeder
             'series_id' => 1,
         ]);
 
+        create_sample_videos();
+
+        Permission::create(['name' => 'videos_manage_index']);
     }
 }
