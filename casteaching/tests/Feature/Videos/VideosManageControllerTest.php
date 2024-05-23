@@ -17,6 +17,81 @@ use Tests\TestCase;
 class VideosManageControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function users_with_permissions_can_destroy_videos()
+    {
+        $this->loginAsVideoManager();
+
+        $video = Video::create([
+            'title' => 'Title',
+            'description' => 'aas',
+            'url' => 'https://www.youtube.com/watch?v=1',
+        ]);
+
+        $response = $this->delete('/manage/videos/'. $video->id);
+
+        $response->assertRedirect(route('videos.manage.index'));
+        $response->assertSessionHas('status', 'Video deleted successfully');
+
+
+        $this->assertNull(Video::find($video->id));
+        $this->assertNull($video->fresh());
+
+
+    }
+
+    /** @test */
+//    public function user_with_permissions_can_store_videos(){
+//        $this->loginAsVideoManager();
+//
+//        $response = $this->post('/manage/videos',[
+//            'title' => 'Title',
+//            'description' => 'aas',
+//            'url' => 'https://www.youtube.com/watch?v=1',
+//        ]);
+//
+//        $videoDB = Video::first();
+//
+//        $this->assertNotNull($videoDB);
+//        $this->assertEquals($videoDB->title, $response->title);
+//        $this->assertEquals($videoDB->description, $response->description);
+//        $this->assertEquals($videoDB->url, $response->url);
+//    }
+    /** @test */
+    public function user_with_permissions_can_see_add_videos()
+    {
+        $this->loginAsVideoManager();
+
+        $response = $this->get('/manage/videos');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('videos.manage.index');
+
+        $response->assertSee('<form data-qa="form_video_create"', false);
+    }
+
+    /** @test */
+    public function user_without_videos_manage_create_cannot_see_add_videos()
+    {
+        Permission::firstOrCreate(['name' => 'videos_manage_index']);
+        $user = User::create([
+            'name' => 'Pepe',
+            'email' => 'Pepe',
+            'password' => Hash::make('12345678')
+        ]);
+        $user->givePermissionTo('videos_manage_index');
+        Auth::login($user);
+
+        $response = $this->get('/manage/videos');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('videos.manage.index');
+
+        $response->assertDontSee('<form data-qa="form_video_create"', false);
+    }
+
+
     /** @test */
     public function user_with_permissions_can_manage_videos()
     {
@@ -66,17 +141,7 @@ class VideosManageControllerTest extends TestCase
 
     private function loginAsVideoManager()
     {
-        $user = User::create([
-            'name' => 'VideoManager',
-            'email' => 'videosmanager@casteaching.com',
-            'password' => Hash::make('12345678')
-        ]);
-
-        Permission::create(['name' => 'videos_manage_index']);
-
-        $user->givePermissionTo('videos_manage_index');
-
-        Auth::login($user);
+        Auth::login(create_video_manager_user());
     }
 
     private function loginAsSuperAdmin()

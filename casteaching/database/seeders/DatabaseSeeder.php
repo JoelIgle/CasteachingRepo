@@ -18,14 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::create([
-            'name' => 'SuperAdmin',
-            'email' => 'superadmin@casteaching.com',
-            'password' => Hash::make('12345678'),
-
-        ]);
-        $user->superadmin = true;
-        $user->save();
+        create_video_manager_user();
 
 
         Video::create([
@@ -40,6 +33,6 @@ class DatabaseSeeder extends Seeder
 
         create_sample_videos();
 
-        Permission::create(['name' => 'videos_manage_index']);
+        create_permissions();
     }
 }

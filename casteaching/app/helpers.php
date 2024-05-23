@@ -4,8 +4,9 @@ use App\Models\User;
 use App\Models\Video;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
-if(!function_exists('create_default_user')){
+if (!function_exists('create_default_user')) {
     function create_default_user()
     {
         User::create([
@@ -15,6 +16,16 @@ if(!function_exists('create_default_user')){
         ]);
     }
 
+
+}
+
+if (!function_exists('create_default_videos')) {
+    function create_permissions()
+    {
+        Permission::firstOrCreate(['name' => 'videos_manage_index']);
+        Permission::firstOrCreate(['name' => 'videos_manage_create']);
+
+    }
 
 }
 if (!function_exists('create_default_videos')) {
@@ -60,30 +71,52 @@ if (!function_exists('create_regular_user')) {
     }
 }
 
-    if (!function_exists('create_sample_videos')) {
+if (!function_exists('create_sample_videos')) {
 
-        function create_sample_videos(){
-            $video1 = Video::create([
-                'title' => 'Video de test',
-                'description' => 'Aquest video es de test',
-                'url' => 'https://www.youtube.com/watch?v=1',
-                'published_at' => Carbon::parse('December 1, 2020 8:00am'),
-                'previous' => null,
-                'next' => null,
-                'series_id' => 1,
-            ]);
-            $video2 = Video::create([
-                'title' => 'Video de test 2',
-                'description' => 'Aquest video es de test 2',
-                'url' => 'https://www.youtube.com/watch?v=1',
-                'published_at' => Carbon::parse('December 1, 2020 8:00am'),
-                'previous' => null,
-                'next' => null,
-                'series_id' => 1,
-            ]);
+    function create_sample_videos()
+    {
+        $video1 = Video::create([
+            'title' => 'Video de test',
+            'description' => 'Aquest video es de test',
+            'url' => 'https://www.youtube.com/watch?v=1',
+            'published_at' => Carbon::parse('December 1, 2020 8:00am'),
+            'previous' => null,
+            'next' => null,
+            'series_id' => 1,
+        ]);
+        $video2 = Video::create([
+            'title' => 'Video de test 2',
+            'description' => 'Aquest video es de test 2',
+            'url' => 'https://www.youtube.com/watch?v=1',
+            'published_at' => Carbon::parse('December 1, 2020 8:00am'),
+            'previous' => null,
+            'next' => null,
+            'series_id' => 1,
+        ]);
 
-            return [$video1,$video2];
+        return [$video1, $video2];
 
-        }
+    }
 
 }
+
+if (!function_exists('create_video_manager_user')) {
+
+        function create_video_manager_user()
+        {
+            $user = User::create([
+                'name' => 'VideosManager',
+                'email' => 'videosmanager@casteaching.com',
+                'password' => Hash::make('12345678'),
+            ]);
+
+            Permission::create(['name' => 'videos_manage_index']);
+            Permission::create(['name' => 'videos_manage_create']);
+            $user->givePermissionTo('videos_manage_index');
+            $user->givePermissionTo('videos_manage_create');
+
+
+            return $user;
+        }
+}
+
