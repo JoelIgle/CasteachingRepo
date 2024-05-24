@@ -41,4 +41,26 @@ class VideosManageController extends Controller
         return redirect()->route('videos.manage.index');
     }
 
+    public function edit($id)
+    {
+        return view('videos.manage.edit', [
+            'video' => Video::findOrFail($id)
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $video = Video::findOrFail($id);
+
+        $video->title = $request->title;
+        $video->description = $request->description;
+        $video->url = $request->url;
+
+        $video->save();
+
+        session()->flash('status', 'Video updated successfully');
+
+        return redirect()->route('videos.manage.index');
+    }
+
 }

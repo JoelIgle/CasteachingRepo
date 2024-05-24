@@ -50,7 +50,7 @@
 
 
                     <div class="sm:col-span-4">
-                        <label for="url" class="block text-sm font-medium leading-6 text-white">Username</label>
+                        <label for="url" class="block text-sm font-medium leading-6 text-white">Url</label>
                         <div class="mt-2">
                             <div class="flex rounded-md bg-gray-700 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
                                 <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">https://</span>
@@ -65,7 +65,6 @@
         </div>
 
         <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" class="text-sm font-semibold leading-6 text-white">Cancel·lar</button>
             <button type="submit" class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Guardar</button>
         </div>
     </form>
@@ -114,7 +113,7 @@
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">{{ $video->url }}</td>
                                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                             <a href="/videos/{{$video->id}}" target="_blank" class="text-indigo-400 hover:text-indigo-300">Show</a>
-                                            <a href="#" class="text-indigo-400 hover:text-indigo-300">Edit</a>
+                                            <a href="/manage/videos/{{$video->id}}" target="_blank" class="text-indigo-400 hover:text-indigo-300">Edit</a>
                                             <form action="/manage/videos/{{$video->id}}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')

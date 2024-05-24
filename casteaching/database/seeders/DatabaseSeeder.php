@@ -20,19 +20,13 @@ class DatabaseSeeder extends Seeder
     {
         create_video_manager_user();
 
+        create_super_admin_user();
 
-        Video::create([
-            'title' => 'Video de la bd',
-            'description' => 'Aquest video es de la bd',
-            'url' => 'https://www.youtube.com/watch?v=1',
-            'published_at' => Carbon::parse('December 1, 2020 8:00am'),
-            'previous' => null,
-            'next' => null,
-            'series_id' => 1,
-        ]);
+        create_video();
 
         create_sample_videos();
 
         create_permissions();
+
     }
 }

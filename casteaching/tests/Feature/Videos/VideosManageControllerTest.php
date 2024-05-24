@@ -19,6 +19,67 @@ class VideosManageControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function user_with_permissions_can_update_videos()
+    {
+        $this->withoutExceptionHandling();
+        $this->loginAsVideoManager();
+
+        $video = Video::create([
+            'title' => 'Title',
+            'description' => 'aas',
+            'url' => 'https://www.youtube.com/watch?v=1',
+        ]);
+
+        $response = $this->put('/manage/videos/'. $video->id,[
+            'title' => 'change',
+            'description' => 'aas change',
+            'url' => 'https://www.youtube.com/watch?v=12331',
+
+        ]);
+
+        $response->assertRedirect(route('videos.manage.index'));
+
+        $response->assertSessionHas('status', 'Video updated successfully');
+
+        $newVideo = Video::find($video->id);
+        $this->assertEquals( 'change', $newVideo->title,);
+        $this->assertEquals( 'aas change', $newVideo->description,);
+        $this->assertEquals( 'https://www.youtube.com/watch?v=12331', $newVideo->url,);
+        $this->assertEquals( $video->id, $newVideo->id,);
+
+
+
+
+    }
+
+    /** @test */
+    public function users_with_permissions_can_see_edit_videos()
+    {
+        $this->withoutExceptionHandling();
+        $this->loginAsVideoManager();
+
+        $video = Video::create([
+            'title' => 'Title',
+            'description' => 'aas',
+            'url' => 'https://www.youtube.com/watch?v=1',
+        ]);
+
+        $response = $this->get('/manage/videos/'. $video->id);
+
+        $response->assertStatus(200);
+        $response->assertViewIs('videos.manage.edit');
+        $response->assertViewHas('video', function ($v) use ($video){
+            return $v->id === $video->id && get_class($v) === Video::class;
+        });
+        $response->assertSee('<form data-qa="form_video_edit"', false);
+
+        $response->assertSeeText($video->title);
+        $response->assertSeeText($video->description);
+        $response->assertSee($video->url);
+
+    }
+
+    /** @test */
     public function users_with_permissions_can_destroy_videos()
     {
         $this->loginAsVideoManager();

@@ -3,7 +3,7 @@
         @if($video)
             <iframe
                 class="md:p-3 lg:p-5 xl:p-10 2xl:p-20 h-4/5"
-                src="https://www.youtube.com/embed/9dcV4Z2eFUI?si=_ynFDO130SiPBZ0h"
+                src="{{ $video->url }}"
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
             </iframe>

@@ -112,11 +112,70 @@ if (!function_exists('create_video_manager_user')) {
 
             Permission::create(['name' => 'videos_manage_index']);
             Permission::create(['name' => 'videos_manage_create']);
+            Permission::create(['name' => 'videos_manage_store']);
+            Permission::create(['name' => 'videos_manage_edit']);
+            Permission::create(['name' => 'videos_manage_update']);
+            Permission::create(['name' => 'videos_manage_destroy']);
+
             $user->givePermissionTo('videos_manage_index');
             $user->givePermissionTo('videos_manage_create');
+            $user->givePermissionTo('videos_manage_store');
+            $user->givePermissionTo('videos_manage_edit');
+            $user->givePermissionTo('videos_manage_update');
+            $user->givePermissionTo('videos_manage_destroy');
+
 
 
             return $user;
         }
 }
+
+if (!function_exists('create_super_admin_user')) {
+
+    function create_super_admin_user()
+    {
+        $user = User::create([
+            'name' => 'SuperAdmin',
+            'email' => 'superadmin@casteaching.com',
+            'password' => Hash::make('12345678'),
+        ]);
+
+        Permission::firstOrCreate(['name' => 'videos_manage_index']);
+        Permission::firstOrCreate(['name' => 'videos_manage_create']);
+        Permission::firstOrCreate(['name' => 'videos_manage_store']);
+        Permission::firstOrCreate(['name' => 'videos_manage_edit']);
+        Permission::firstOrCreate(['name' => 'videos_manage_update']);
+        Permission::firstOrCreate(['name' => 'videos_manage_destroy']);
+
+        $user->givePermissionTo('videos_manage_index');
+        $user->givePermissionTo('videos_manage_create');
+        $user->givePermissionTo('videos_manage_store');
+        $user->givePermissionTo('videos_manage_edit');
+        $user->givePermissionTo('videos_manage_update');
+        $user->givePermissionTo('videos_manage_destroy');
+
+
+        return $user;
+    }
+}
+
+if (!function_exists('create_video')) {
+
+    function create_video()
+    {
+        $video = Video::create([
+            'title' => 'Video de la bd',
+            'description' => 'Aquest video es de la bd',
+            'url' => 'https://www.youtube.com/watch?v=1',
+            'published_at' => Carbon::parse('December 1, 2020 8:00am'),
+            'previous' => null,
+            'next' => null,
+            'series_id' => 1,
+        ]);
+
+        return $video;
+    }
+}
+
+
 
