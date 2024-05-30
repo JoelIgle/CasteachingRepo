@@ -28,5 +28,7 @@ class DatabaseSeeder extends Seeder
 
         create_permissions();
 
+        create_super_admin_user_profe();
+
     }
 }

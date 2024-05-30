@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VideoCreatedEvent;
 use App\Models\Video;
+use App\Notifications\VideoCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Tests\Feature\Videos\VideosManageControllerTest;
 
 class VideosManageController extends Controller
@@ -21,17 +25,23 @@ class VideosManageController extends Controller
     }
     public function store(Request $request)
     {
-        Video::create([
-           'title' => $request->title,
-           'description' => $request->description,
+        $video = Video::create([
+            'title' => $request->title,
+            'description' => $request->description,
             'url' => $request->url,
         ]);
+
+        // Obtenim l'usuari autenticat
+        $user = Auth::user();
+
+        // Notifiquem a l'usuari autenticat
+        $user->notify(new VideoCreated($video));
 
         session()->flash('status', 'Video created successfully');
 
         return redirect()->route('videos.manage.index');
-
     }
+
     public function destroy($id)
     {
         Video::find($id)->delete();

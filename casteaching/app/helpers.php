@@ -71,6 +71,22 @@ if (!function_exists('create_regular_user')) {
     }
 }
 
+if (!function_exists('create_sample_video')) {
+
+    function create_sample_video()
+    {
+        return Video::create([
+            'title' => 'Video de test',
+            'description' => 'Aquest video es de test',
+            'url' => 'https://www.youtube.com/watch?v=1',
+            'published_at' => Carbon::parse('December 1, 2020 8:00am'),
+            'previous' => null,
+            'next' => null,
+            'series_id' => 1,
+        ]);
+    }
+}
+
 if (!function_exists('create_sample_videos')) {
 
     function create_sample_videos()
@@ -106,7 +122,7 @@ if (!function_exists('create_video_manager_user')) {
         {
             $user = User::create([
                 'name' => 'VideosManager',
-                'email' => 'videosmanager@casteaching.com',
+                'email' => 'joeliglesias@iesebre.com',
                 'password' => Hash::make('12345678'),
             ]);
 
@@ -137,6 +153,35 @@ if (!function_exists('create_super_admin_user')) {
         $user = User::create([
             'name' => 'SuperAdmin',
             'email' => 'superadmin@casteaching.com',
+            'password' => Hash::make('12345678'),
+        ]);
+
+        Permission::firstOrCreate(['name' => 'videos_manage_index']);
+        Permission::firstOrCreate(['name' => 'videos_manage_create']);
+        Permission::firstOrCreate(['name' => 'videos_manage_store']);
+        Permission::firstOrCreate(['name' => 'videos_manage_edit']);
+        Permission::firstOrCreate(['name' => 'videos_manage_update']);
+        Permission::firstOrCreate(['name' => 'videos_manage_destroy']);
+
+        $user->givePermissionTo('videos_manage_index');
+        $user->givePermissionTo('videos_manage_create');
+        $user->givePermissionTo('videos_manage_store');
+        $user->givePermissionTo('videos_manage_edit');
+        $user->givePermissionTo('videos_manage_update');
+        $user->givePermissionTo('videos_manage_destroy');
+
+
+        return $user;
+    }
+}
+
+if (!function_exists('create_super_admin_user_profe')) {
+
+    function create_super_admin_user_profe()
+    {
+        $user = User::create([
+            'name' => 'SuperAdminProfe',
+            'email' => 'jordivega@iesebre.com',
             'password' => Hash::make('12345678'),
         ]);
 
